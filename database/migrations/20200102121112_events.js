@@ -39,8 +39,25 @@ exports.up = function (knex) {
                 .references('id')
                 .inTable('events')
                 .onUpdate('CASCADE')
-                .onDelete('CASCADE')
+                .onDelete('CASCADE');
+            tbl.integer('points'); // Every match win is 3 points every match drawn is 1 point
+
+            tbl.integer('gamesPlayed');
+            tbl.integer('gamesWon');
+            tbl.integer('gamesTied');
+
+            tbl.integer('matchesPlayed');
+            tbl.integer('matchesWon');
+            tbl.integer('matchesTied')
+
+            // OMW - (Opponents Matches Won/Opponents Total Matches Played)
+            // GW - (Games Won/Games Played)
+            // OGW - (Opponents Games Won/Opponents Total Games Played)
         })
+        .createTable('playerList', tbl => {
+
+        })
+
 };
 
 exports.down = function (knex) {
