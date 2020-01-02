@@ -6,6 +6,56 @@ const restricted = require('../auth/authenticate-middleware.js');
 const generateToken = require('../auth/generateToken.js');
 const Users = require('./auth-helpers.js');
 
+/**
+ * @apiDefine UserNotFound
+ * @apiError UserNotFound Email is not in the system
+ */
+
+/**
+ * @apiDefine InvalidEmailPassword
+ * @apiError InvalidEmailPassword
+ * @apiErrorExample {json} Invalid-Email-Password
+ * {
+ *     "message": "Invalid Credentials"
+ * }
+ */
+
+/**
+ * @apiDefine EmailAlreadyTaken
+ * @apiError EmailAlreadyTaken Email is already taken
+ * @apiErrorExample {json} Email-Already-Taken
+ * {
+ *     "message": "Email is already taken"
+ * }
+ */
+
+/**
+ * @apiDefine UserNameAlreadyTaken
+ * @apiError UserNameAlreadyTaken Username is already taken
+ * @apiErrorExample {json} Username-Already-Taken
+ * {
+ *     "message": "Username is already taken"
+ * }
+ */
+
+/**
+ * @apiDefine RegisterFieldsRequired
+ * @apiError RegisterValidationFail Fields are required
+ * @apiErrorExample {json} Register-Fields-Required
+ * {
+ *     "message": "Email, username, and password are required"
+ * }
+ */
+
+/**
+ * @apiDefine LoginFieldsRequired
+ * @apiError LoginValidationFail Fields are required
+ * @apiErrorExample {json} Login-Fields-Required
+ * {
+ *     "message": "Email and password are required"
+ * }
+ */
+
 // Show all Users
 router.get('/', restricted, (req, res) => {
   Users.find()
@@ -77,19 +127,44 @@ router.delete('/delete/:id', restricted, (req, res) => {
 });
 
 // Register a New User
+
+/**
+ * @api {post} https://magic-the-gathering-tournament.herokuapp.com/api/auth/register Registers a new user
+ * @apiUse UserNameAlreadyTaken
+ * @apiUse RegisterFieldsRequired
+ * @apiVersion 1.0.0
+ * @apiName RegisterUser
+ * @apiGroup Auth
+ * @apiPermission none
+ * @apiDescription Registers a new user
+ * @apiParam {String} email The New Users email *Required, *Unique
+ * @apiParam {String} username The New Users username *Required, *Unique
+ * @apiParam {String} password The New Users password *Required
+ * @apiParam {String} location The New Users location *Optional
+ * @apiParamExample {json} Sample Request
+ * {
+ *     "email": "mtgtourney@mtg.com",
+ *     "username": "mtgtourney",
+ *     "password": "supersecretpassword"
+ * }
+ * @apiSuccess {Object} message Welcome message and token for the new user
+ * @apiSuccessExample {json} Success-Response:
+ * {
+ *     "message": "Welcome mtgtourney!"
+ *     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1Nzc5OTA4MzcsImV4cCI6MTU3ODA3NzIzN30.hF8BpMjHGwbAK-5AqXQZ3aBHu0G62KoaBFLWKe5KD1s"
+ * }
+ *
+ */
+
 router.post('/register', validator.register, (req, res) => {
   // implement registration
-  const { username, password, email, location } = req.body;
-  const hash = bcrypt.hashSync(password, 8);
-  password = hash;
-  username = username.toLowerCase();
-  email = email.toLowerCase();
-  location = location.toLowerCase();
-  user = { username, password, email, location };
+  req.body.password = bcrypt.hashSync(req.body.password, 8);
 
-  Users.add(user)
+  Users.add(req.body)
     .then(saved => {
-      res.status(201).json(saved);
+      const message = `Welcome ${saved[0].username}!`;
+      const token = generateToken(saved);
+      res.status(201).json({ message, token });
     })
     .catch(error => {
       res
@@ -99,27 +174,53 @@ router.post('/register', validator.register, (req, res) => {
 });
 
 // Login with an existing User
+
+/**
+ * @api {post} https://magic-the-gathering-tournament.herokuapp.com/api/auth/register Logins a new user
+ * @apiUse LoginFieldsRequired
+ * @apiUse InvalidEmailPassword
+ * @apiVersion 1.0.0
+ * @apiName LoginUser
+ * @apiGroup Auth
+ * @apiPermission none
+ * @apiDescription Registers a new user
+ * @apiParam {String} email The New Users email *Required, *Unique
+ * @apiParam {String} username The New Users username *Required, *Unique
+ * @apiParam {String} password The New Users password *Required
+ * @apiParam {String} location The New Users location *Optional
+ * @apiParamExample {json} Sample Request
+ * {
+ *     "email": "mtgtourney@mtg.com",
+ *     "username": "mtgtourney",
+ *     "password": "supersecretpassword"
+ * }
+ * @apiSuccess {Object} message Welcome message and token for the new user
+ * @apiSuccessExample {json} Success-Response:
+ * {
+ *     "message": "Welcome back mtgtourney!"
+ *     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1Nzc5OTA4MzcsImV4cCI6MTU3ODA3NzIzN30.hF8BpMjHGwbAK-5AqXQZ3aBHu0G62KoaBFLWKe5KD1s"
+ * }
+ *
+ */
+
 router.post('/login', validator.login, (req, res) => {
   // implement login
   let { email, password } = req.body;
-  console.log('email and password', email, password)
   email = email.toLowerCase();
-  console.log('email lowcase', email)
   Users.findBy({ email })
     .first()
     .then(user => {
-      console.log('This is the user', user)
       if (user && bcrypt.compareSync(password, user.password)) {
         const token = generateToken(user);
-        user.token = token;
-        res.status(200).json(user);
+        const message = `Welcome back ${user.username}!`;
+        res.status(200).json({ message, token });
       } else {
         res.status(401).json({ message: 'Invalid Credentials' });
       }
-    }).catch(err => {
-      console.log('this is the err at the end 117', err)
     })
-
+    .catch(err => {
+      res.status(500).json(err);
+    });
 });
 
 module.exports = router;
