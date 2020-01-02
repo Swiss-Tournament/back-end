@@ -79,28 +79,29 @@ router.delete('/delete/:id', restricted, (req, res) => {
 // Register a New User
 router.post('/register', validator.register, (req, res) => {
   // implement registration
-  const user = req.body;
-  const hash = bcrypt.hashSync(user.password, 8);
-  user.password = hash;
-  user.username = user.username.toLowerCase();
-  user.email = user.email.toLowerCase();
-  user.location = user.location.toLowerCase();
+  const { username, password, email, location } = req.body;
+  const hash = bcrypt.hashSync(password, 8);
+  password = hash;
+  username = username.toLowerCase();
+  email = email.toLowerCase();
+  location = location.toLowerCase();
+  user = { username, password, email, location };
 
   Users.add(user)
     .then(saved => {
       res.status(201).json(saved);
     })
     .catch(error => {
-      res.status(400).json({ message: 'Invalid Login, please try again.' });
+      res.status(400).json({ message: 'Invalid Registration, please try again.' });
     });
 });
 
 // Login with an existing User
 router.post('/login', validator.login, (req, res) => {
   // implement login
-  let { username, password } = req.body;
-  username = username.toLowerCase();
-  Users.findBy({ username })
+  let { email, password } = req.body;
+  email = email.toLowerCase();
+  Users.findBy({ email })
     .first()
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {
