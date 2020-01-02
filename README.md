@@ -4,19 +4,19 @@
 Magic the Gathering Tournament App
 
 - [Auth](#auth)
-  - [Registers a new user](#registers-a-new-user)
+  - [Logins a new user](#logins-a-new-user)
   - [Registers a new user](#registers-a-new-user)
   
 
 
 # Auth
 
-## Registers a new user
+## Logins a new user
 [Back to top](#top)
 
 <p>Registers a new user</p>
 
-  POST /api/auth/register
+  POST https://magic-the-gathering-tournament.herokuapp.com/api/auth/register
 
 
 
@@ -78,7 +78,7 @@ Invalid-Email-Password
 
 <p>Registers a new user</p>
 
-  POST /api/auth/register
+  POST https://magic-the-gathering-tournament.herokuapp.com/api/auth/register
 
 
 

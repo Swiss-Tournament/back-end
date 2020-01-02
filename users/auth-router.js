@@ -129,7 +129,7 @@ router.delete('/delete/:id', restricted, (req, res) => {
 // Register a New User
 
 /**
- * @api {post} /api/auth/register Registers a new user
+ * @api {post} https://magic-the-gathering-tournament.herokuapp.com/api/auth/register Registers a new user
  * @apiUse UserNameAlreadyTaken
  * @apiUse RegisterFieldsRequired
  * @apiVersion 1.0.0
@@ -176,7 +176,7 @@ router.post('/register', validator.register, (req, res) => {
 // Login with an existing User
 
 /**
- * @api {post} /api/auth/register Registers a new user
+ * @api {post} https://magic-the-gathering-tournament.herokuapp.com/api/auth/register Logins a new user
  * @apiUse LoginFieldsRequired
  * @apiUse InvalidEmailPassword
  * @apiVersion 1.0.0
