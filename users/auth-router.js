@@ -99,9 +99,9 @@ router.post('/register', validator.register, (req, res) => {
 // Login with an existing User
 router.post('/login', validator.login, (req, res) => {
   // implement login
-  let { username, password } = req.body;
-  username = username.toLowerCase();
-  Users.findBy({ username })
+  let { email, password } = req.body;
+  email = email.toLowerCase();
+  Users.findBy({ email })
     .first()
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {
