@@ -124,7 +124,7 @@ exports.up = function (knex) {
 exports.down = function (knex) {
     return knex.schema
         .dropTableIfExists('match')
-        .dropTableIfExists('pairing')
+        .dropTableIfExists('pairings')
         .dropTableIfExists('game')
         .dropTableIfExists('playerList')
         .dropTableIfExists('admin')
