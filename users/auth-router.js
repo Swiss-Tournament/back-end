@@ -191,10 +191,9 @@ router.post('/register', validator.register, (req, res) => {
  *
  */
 
-router.post('/login', validator.login, (req, res) => {
+router.post('/login', validator.login, async (req, res) => {
   // implement login
-  let { email, password } = req.body;
-  email = email.toLowerCase();
+  const { email, password } = req.body;
   Users.findBy({ email })
     .first()
     .then(user => {
