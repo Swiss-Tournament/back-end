@@ -17,16 +17,14 @@ function findById(id) {
 function add(user) {
   return db('users')
     .insert(user, 'id')
-    .then(ids => {
-      const [id] = ids;
-      return findById(id);
-    });
+    .returning('*');
 }
 
 function update(id, load) {
   return db('users')
     .where({ id })
-    .update(load);
+    .update(load)
+    .returning('*');
 }
 
 function remove(id) {
