@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
+const validator = require('../auth/authentication-validators');
 
 const restricted = require('../auth/authenticate-middleware.js');
 const generateToken = require('../auth/generateToken.js');
@@ -76,7 +77,7 @@ router.delete('/delete/:id', restricted, (req, res) => {
 });
 
 // Register a New User
-router.post('/register', (req, res) => {
+router.post('/register', validator.register, (req, res) => {
   // implement registration
   const user = req.body;
   const hash = bcrypt.hashSync(user.password, 8);
@@ -95,7 +96,7 @@ router.post('/register', (req, res) => {
 });
 
 // Login with an existing User
-router.post('/login', (req, res) => {
+router.post('/login', validator.login, (req, res) => {
   // implement login
   let { username, password } = req.body;
   username = username.toLowerCase();
