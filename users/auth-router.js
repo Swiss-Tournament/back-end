@@ -102,7 +102,7 @@ router.post('/login', validator.login, (req, res) => {
   let { email, password } = req.body;
   email = email.toLowerCase();
   Users.findBy({ email })
-    .first()
+    // .first()
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {
         const token = generateToken(user);
