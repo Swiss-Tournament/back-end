@@ -25,7 +25,7 @@ function update(id, load) {
   return db('users')
     .where({ id })
     .update(load)
-    .returning('*');
+    .returning(['id', 'email', 'username', 'location']);
 }
 
 function remove(id) {
