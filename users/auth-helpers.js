@@ -11,6 +11,7 @@ function findBy(filter) {
 function findById(id) {
   return db('users')
     .where({ id })
+    .select(['id', 'email', 'username', 'location'])
     .first();
 }
 
@@ -24,7 +25,7 @@ function update(id, load) {
   return db('users')
     .where({ id })
     .update(load)
-    .returning('*');
+    .returning(['id', 'email', 'username', 'location']);
 }
 
 function remove(id) {

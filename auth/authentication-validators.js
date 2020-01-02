@@ -26,4 +26,20 @@ async function login(req, res, next) {
   next();
 }
 
-module.exports = { register, login };
+async function update(req, res, next) {
+  if (req.body.email) {
+    const checkEmail = await Users.findBy({ email: req.body.email });
+    if (checkEmail.length > 0) {
+      return res.status(400).json({ message: 'Email is already taken' });
+    }
+  }
+  if (req.body.username) {
+    const checkUsername = await Users.findBy({ username: req.body.username });
+    if (checkUsername.length > 0) {
+      return res.status(400).json({ message: 'Username is already taken' });
+    }
+  }
+  next();
+}
+
+module.exports = { register, login, update };
