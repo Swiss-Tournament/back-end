@@ -56,33 +56,21 @@ const Users = require('./auth-helpers.js');
  * }
  */
 
-// Show all Users
-router.get('/', restricted, (req, res) => {
-  Users.find()
-    .then(users => {
-      res.status(201).json(users);
+// Show logged in user
+router.get('/user', restricted, (req, res) => {
+  const { id } = req.user;
+  Users.findById(id)
+    .then(user => {
+      res.json(user);
     })
     .catch(error => {
       res.status(404).json(error);
     });
 });
 
-// Show one User by ID
-router.get('/:id', restricted, (req, res) => {
-  const { id } = req.params;
-
-  Users.findById(id)
-    .then(user => {
-      res.status(200).json(user);
-    })
-    .catch(error => {
-      res.status(500).json(error);
-    });
-});
-
 // Allows you to change Password, but only while logged in.
-router.put('/update/:id', restricted, (req, res) => {
-  const { id } = req.params;
+router.put('/user', restricted, (req, res) => {
+  const { id } = req.user;
   const updatedUser = req.body;
 
   Users.findById(id)
@@ -111,8 +99,8 @@ router.put('/update/:id', restricted, (req, res) => {
 });
 
 // Delete A User
-router.delete('/delete/:id', restricted, (req, res) => {
-  const { id } = req.params;
+router.delete('/user', restricted, (req, res) => {
+  const { id } = req.user;
   Users.remove(id)
     .then(event => {
       if (event) {
