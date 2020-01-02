@@ -7,6 +7,9 @@ Magic the Gathering Tournament App
   - [Logins a new user](#logins-a-new-user)
   - [Registers a new user](#registers-a-new-user)
   
+- [User](#user)
+  - [Gets current user information](#gets-current-user-information)
+  
 
 
 # Auth
@@ -14,9 +17,9 @@ Magic the Gathering Tournament App
 ## Logins a new user
 [Back to top](#top)
 
-<p>Registers a new user</p>
+<p>Logins a new user</p>
 
-  POST https://magic-the-gathering-tournament.herokuapp.com/api/auth/register
+  POST https://magic-the-gathering-tournament.herokuapp.com/api/auth/login
 
 
 
@@ -135,3 +138,37 @@ Register-Fields-Required
     "message": "Email, username, and password are required"
 }
 ```
+# User
+
+## Gets current user information
+[Back to top](#top)
+
+<p>Retrieves the current login user</p>
+
+  GET https://magic-the-gathering-tournament.herokuapp.com/api/auth/user
+
+
+
+
+### Success Response
+
+Success-Response:
+
+```
+{
+     "id": 9,
+     "email": "Leonie_Hickle@gmail.com",
+     "username": "Holly_Brown47",
+     "location": null
+}
+```
+
+### Success 200
+
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| user | Object | <p>Returns the user information minus password</p>|
+
+
+
+

@@ -57,6 +57,24 @@ const Users = require('./auth-helpers.js');
  */
 
 // Show logged in user
+
+/**
+ * @api {get} https://magic-the-gathering-tournament.herokuapp.com/api/auth/user Gets current user information
+ * @apiVersion 1.0.0
+ * @apiName GetUser
+ * @apiGroup User
+ * @apiPermission token
+ * @apiDescription Retrieves the current login user
+ * @apiSuccess {Object} user Returns the user information minus password
+ * @apiSuccessExample {json} Success-Response:
+ * {
+ *      "id": 9,
+ *      "email": "Leonie_Hickle@gmail.com",
+ *      "username": "Holly_Brown47",
+ *      "location": null
+ * }
+ *
+ */
 router.get('/user', restricted, (req, res) => {
   const { id } = req.user;
   Users.findById(id)
@@ -69,33 +87,26 @@ router.get('/user', restricted, (req, res) => {
 });
 
 // Allows you to change Password, but only while logged in.
-router.put('/user', restricted, (req, res) => {
+router.put('/user', restricted, validator.update, (req, res) => {
   const { id } = req.user;
   const updatedUser = req.body;
 
   Users.findById(id)
     .then(user => {
       console.log(user);
-      if (user.username === updatedUser.username) {
-        // Checks that username isn't being changed
-
+      if (updatedUser.password) {
         const hash = bcrypt.hashSync(updatedUser.password, 8); // hashes new password
         updatedUser.password = hash; // sets it over the one sent through the body
-
-        Users.update(id, updatedUser)
-          .then(updated => {
-            res.status(201).json(updated);
-          })
-          .catch(error => {
-            res.status(400).json(error);
-          });
-      } else {
-        res.status(403).json({ message: 'You cannot change the username.' });
       }
+      Users.update(id, updatedUser)
+        .then(updated => {
+          res.status(201).json(updated);
+        })
+        .catch(error => {
+          res.status(400).json(error);
+        });
     })
-    .catch(err => {
-      res.status(404).json({ message: 'User not found.' });
-    });
+    .catch(err => res.status(500).json(err));
 });
 
 // Delete A User
@@ -164,14 +175,14 @@ router.post('/register', validator.register, (req, res) => {
 // Login with an existing User
 
 /**
- * @api {post} https://magic-the-gathering-tournament.herokuapp.com/api/auth/register Logins a new user
+ * @api {post} https://magic-the-gathering-tournament.herokuapp.com/api/auth/login Logins a new user
  * @apiUse LoginFieldsRequired
  * @apiUse InvalidEmailPassword
  * @apiVersion 1.0.0
  * @apiName LoginUser
  * @apiGroup Auth
  * @apiPermission none
- * @apiDescription Registers a new user
+ * @apiDescription Logins a new user
  * @apiParam {String} email The New Users email *Required, *Unique
  * @apiParam {String} username The New Users username *Required, *Unique
  * @apiParam {String} password The New Users password *Required
@@ -191,10 +202,9 @@ router.post('/register', validator.register, (req, res) => {
  *
  */
 
-router.post('/login', validator.login, (req, res) => {
+router.post('/login', validator.login, async (req, res) => {
   // implement login
-  let { email, password } = req.body;
-  email = email.toLowerCase();
+  const { email, password } = req.body;
   Users.findBy({ email })
     .first()
     .then(user => {
