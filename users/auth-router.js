@@ -100,10 +100,13 @@ router.post('/register', validator.register, (req, res) => {
 router.post('/login', validator.login, (req, res) => {
   // implement login
   let { email, password } = req.body;
+  console.log('email and password', email, password)
   email = email.toLowerCase();
+  console.log('email lowcase', email)
   Users.findBy({ email })
     // .first()
     .then(user => {
+      console.log('This is the user', user)
       if (user && bcrypt.compareSync(password, user.password)) {
         const token = generateToken(user);
         user.token = token;
@@ -111,7 +114,10 @@ router.post('/login', validator.login, (req, res) => {
       } else {
         res.status(401).json({ message: 'Invalid Credentials' });
       }
-    });
+    }).catch(err => {
+      console.log('this is the err at the end 117', err)
+    })
+
 });
 
 module.exports = router;
