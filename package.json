@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "lint:fix": "eslint . --fix",
     "server": "nodemon index.js",
     "start": "node index.js",
     "test": "cross-env DB_ENV=testing jest --watch"
