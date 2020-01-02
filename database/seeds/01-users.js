@@ -10,7 +10,6 @@ for (let i = 0; i < 100; i++) {
     password: bcrypt.hashSync('mtgpassword', 8),
   });
 }
-console.log(data);
 
 exports.seed = knex =>
   knex('users')

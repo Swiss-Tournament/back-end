@@ -9,11 +9,14 @@ module.exports = (req, res, next) => {
       if (err) {
         res.status(401).json({ message: 'Invalid Login or Token Expired.' });
       } else {
-        req.user = { username: decodedToken.username };
+        req.user = {
+          id: decodedToken.subject,
+          username: decodedToken.username,
+        };
         next();
       }
     });
   } else {
-    res.status(400).json({ message: 'No Credentials provided!' });
+    res.status(401).json({ message: 'No Credentials provided!' });
   }
 };
