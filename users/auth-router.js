@@ -79,12 +79,13 @@ router.delete('/delete/:id', restricted, (req, res) => {
 // Register a New User
 router.post('/register', validator.register, (req, res) => {
   // implement registration
-  const user = req.body;
-  const hash = bcrypt.hashSync(user.password, 8);
-  user.password = hash;
-  user.username = user.username.toLowerCase();
-  user.email = user.email.toLowerCase();
-  user.location = user.location.toLowerCase();
+  const { username, password, email, location } = req.body;
+  const hash = bcrypt.hashSync(password, 8);
+  password = hash;
+  username = username.toLowerCase();
+  email = email.toLowerCase();
+  location = location.toLowerCase();
+  user = { username, password, email, location };
 
   Users.add(user)
     .then(saved => {
