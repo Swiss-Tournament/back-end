@@ -90,7 +90,7 @@ router.post('/register', (req, res) => {
       res.status(201).json(saved);
     })
     .catch(error => {
-      res.status(400).json({ message: 'Invalid Login, please try again.' });
+      res.status(400).json({ message: 'Invalid Registration, please try again.' });
     });
 });
 
