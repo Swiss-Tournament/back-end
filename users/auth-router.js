@@ -138,7 +138,7 @@ router.delete('/delete/:id', restricted, (req, res) => {
  * @apiParamSuccess {Object} message Welcome message and token for the new user
  * {
  *     "message": "Welcome mtgtourney"
- *     "token":
+ *     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1Nzc5OTA4MzcsImV4cCI6MTU3ODA3NzIzN30.hF8BpMjHGwbAK-5AqXQZ3aBHu0G62KoaBFLWKe5KD1s"
  * }
  *
  */
@@ -149,7 +149,7 @@ router.post('/register', validator.register, (req, res) => {
 
   Users.add(req.body)
     .then(saved => {
-      const message = `Welcome ${saved.username}`;
+      const message = `Welcome ${saved[0].username}`;
       const token = generateToken(saved);
       res.status(201).json({ message, token });
     })
