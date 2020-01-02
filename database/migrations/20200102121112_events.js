@@ -2,9 +2,8 @@ exports.up = function (knex) {
     return knex.schema
         .createTable('events', tbl => {
             tbl.increments();
-            tbl.string('scoreboard_id', 255) // come back to this one
             tbl
-                .string('location_id', 255) // what form is the data for location
+                .string('location', 255) // what form is the data for location
                 .notNullable()
             // admins is a seperate table tied in by event ID
             tbl.boolean('public').notNullable();
@@ -19,11 +18,12 @@ exports.up = function (knex) {
             tbl.integer('currentRound')
             tbl.integer('maxRounds')
         })
-        .createTable('admin', tbl => {
+        .createTable('admins', tbl => {
             tbl.increments();
             tbl.string('username').notNullable();
             tbl
                 .integer('event_id')
+                .unsigned()
                 .notNullable()
                 .references('id')
                 .inTable('events')
@@ -35,6 +35,7 @@ exports.up = function (knex) {
             tbl.string('username').notNullable();
             tbl
                 .integer('event_id')
+                .unsigned()
                 .notNullable()
                 .references('id')
                 .inTable('events')
@@ -54,10 +55,61 @@ exports.up = function (knex) {
             // GW - (Games Won/Games Played)
             // OGW - (Opponents Games Won/Opponents Total Games Played)
         })
-        .createTable('playerList', tbl => {
-
+        .createTable('game', tbl => {
+            tbl.increments();
+            tbl
+                .integer('event_id')
+                .unsigned()
+                .notNullable()
+                .references('id')
+                .inTable('events')
+                .onUpdate('CASCADE')
+                .onDelete('CASCADE');
+            tbl.integer('matchesPlayed')
+            tbl.integer('player1_score')
+            tbl.integer('player2_score')
+            tbl.string('gameResults')
         })
-
+        .createTable('pairings', tbl => {
+            tbl.increments();
+            tbl
+                .integer('event_id')
+                .unsigned()
+                .notNullable()
+                .references('id')
+                .inTable('events')
+                .onUpdate('CASCADE')
+                .onDelete('CASCADE');
+            tbl
+                .integer('game_id')
+                .unsigned()
+                .notNullable()
+                .references('id')
+                .inTable('game')
+                .onUpdate('CASCADE')
+                .onDelete('CASCADE');
+            tbl
+                .integer('player1_id')
+                .unsigned()
+                .notNullable()
+                .references('id')
+                .inTable('playerList')
+                .onUpdate('CASCADE')
+                .onDelete('CASCADE');
+            tbl
+                .integer('player2_id')
+                .unsigned()
+                .notNullable()
+                .references('id')
+                .inTable('playerList')
+                .onUpdate('CASCADE')
+                .onDelete('CASCADE');
+        })
+        .createTable('match', tbl => {
+            tbl.increments();
+            tbl.integer('player1_score')
+            tbl.integer('player2_score')
+        })
 };
 
 exports.down = function (knex) {
@@ -65,4 +117,7 @@ exports.down = function (knex) {
         .dropTableIfExists('events')
         .dropTableIfExists('admin')
         .dropTableIfExists('playerList')
+        .dropTableIfExists('game')
+        .dropTableIfExists('pairing')
+        .dropTableIfExists('match')
 };
