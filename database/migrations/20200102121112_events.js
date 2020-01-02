@@ -109,15 +109,24 @@ exports.up = function (knex) {
             tbl.increments();
             tbl.integer('player1_score')
             tbl.integer('player2_score')
+            tbl.string('gameResults')
+            tbl
+                .integer('game_id')
+                .unsigned()
+                .notNullable()
+                .references('id')
+                .inTable('game')
+                .onUpdate('CASCADE')
+                .onDelete('CASCADE');
         })
 };
 
 exports.down = function (knex) {
     return knex.schema
-        .dropTableIfExists('events')
-        .dropTableIfExists('admin')
-        .dropTableIfExists('playerList')
-        .dropTableIfExists('game')
-        .dropTableIfExists('pairing')
         .dropTableIfExists('match')
+        .dropTableIfExists('pairing')
+        .dropTableIfExists('game')
+        .dropTableIfExists('playerList')
+        .dropTableIfExists('admin')
+        .dropTableIfExists('events')
 };
