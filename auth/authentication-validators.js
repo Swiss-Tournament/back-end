@@ -23,6 +23,7 @@ async function login(req, res, next) {
       .status(400)
       .json({ message: 'Email and password are required.' });
   }
+  next();
 }
 
 module.exports = { register, login };
