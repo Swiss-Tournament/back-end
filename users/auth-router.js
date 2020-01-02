@@ -12,8 +12,12 @@ const Users = require('./auth-helpers.js');
  */
 
 /**
- * @apiDefine NotAuthorized
- * @apiError NotAuthorized User is not authorized
+ * @apiDefine InvalidEmailPassword
+ * @apiError InvalidEmailPassword
+ * @apiErrorExample {json} Invalid-Email-Password
+ * {
+ *     "message": "Invalid Credentials"
+ * }
  */
 
 /**
@@ -40,6 +44,15 @@ const Users = require('./auth-helpers.js');
  * @apiErrorExample {json} Register-Fields-Required
  * {
  *     "message": "Email, username, and password are required"
+ * }
+ */
+
+/**
+ * @apiDefine LoginFieldsRequired
+ * @apiError LoginValidationFail Fields are required
+ * @apiErrorExample {json} Login-Fields-Required
+ * {
+ *     "message": "Email and password are required"
  * }
  */
 
@@ -118,7 +131,6 @@ router.delete('/delete/:id', restricted, (req, res) => {
 /**
  * @api {post} /api/auth/register Registers a new user
  * @apiUse UserNameAlreadyTaken
- * @apiUse EmailAlreadyTaken
  * @apiUse RegisterFieldsRequired
  * @apiVersion 1.0.0
  * @apiName RegisterUser
@@ -135,9 +147,10 @@ router.delete('/delete/:id', restricted, (req, res) => {
  *     "username": "mtgtourney",
  *     "password": "supersecretpassword"
  * }
- * @apiParamSuccess {Object} message Welcome message and token for the new user
+ * @apiSuccess {Object} message Welcome message and token for the new user
+ * @apiSuccessExample {json} Success-Response:
  * {
- *     "message": "Welcome mtgtourney"
+ *     "message": "Welcome mtgtourney!"
  *     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1Nzc5OTA4MzcsImV4cCI6MTU3ODA3NzIzN30.hF8BpMjHGwbAK-5AqXQZ3aBHu0G62KoaBFLWKe5KD1s"
  * }
  *
@@ -149,7 +162,7 @@ router.post('/register', validator.register, (req, res) => {
 
   Users.add(req.body)
     .then(saved => {
-      const message = `Welcome ${saved[0].username}`;
+      const message = `Welcome ${saved[0].username}!`;
       const token = generateToken(saved);
       res.status(201).json({ message, token });
     })
@@ -161,26 +174,52 @@ router.post('/register', validator.register, (req, res) => {
 });
 
 // Login with an existing User
+
+/**
+ * @api {post} /api/auth/register Registers a new user
+ * @apiUse LoginFieldsRequired
+ * @apiUse InvalidEmailPassword
+ * @apiVersion 1.0.0
+ * @apiName LoginUser
+ * @apiGroup Auth
+ * @apiPermission none
+ * @apiDescription Registers a new user
+ * @apiParam {String} email The New Users email *Required, *Unique
+ * @apiParam {String} username The New Users username *Required, *Unique
+ * @apiParam {String} password The New Users password *Required
+ * @apiParam {String} location The New Users location *Optional
+ * @apiParamExample {json} Sample Request
+ * {
+ *     "email": "mtgtourney@mtg.com",
+ *     "username": "mtgtourney",
+ *     "password": "supersecretpassword"
+ * }
+ * @apiSuccess {Object} message Welcome message and token for the new user
+ * @apiSuccessExample {json} Success-Response:
+ * {
+ *     "message": "Welcome back mtgtourney!"
+ *     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1Nzc5OTA4MzcsImV4cCI6MTU3ODA3NzIzN30.hF8BpMjHGwbAK-5AqXQZ3aBHu0G62KoaBFLWKe5KD1s"
+ * }
+ *
+ */
+
 router.post('/login', validator.login, (req, res) => {
   // implement login
   let { email, password } = req.body;
-  console.log('email and password', email, password);
   email = email.toLowerCase();
-  console.log('email lowcase', email);
   Users.findBy({ email })
     .first()
     .then(user => {
-      console.log('This is the user', user);
       if (user && bcrypt.compareSync(password, user.password)) {
         const token = generateToken(user);
-        user.token = token;
-        res.status(200).json(user);
+        const message = `Welcome back ${user.username}!`;
+        res.status(200).json({ message, token });
       } else {
         res.status(401).json({ message: 'Invalid Credentials' });
       }
     })
     .catch(err => {
-      console.log('this is the err at the end 117', err);
+      res.status(500).json(err);
     });
 });
 
