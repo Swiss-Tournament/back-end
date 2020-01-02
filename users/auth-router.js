@@ -106,7 +106,7 @@ router.post('/login', validator.login, (req, res) => {
   email = email.toLowerCase();
   console.log('email lowcase', email)
   Users.findBy({ email })
-    // .first()
+    .first()
     .then(user => {
       console.log('This is the user', user)
       if (user && bcrypt.compareSync(password, user.password)) {
