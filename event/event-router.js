@@ -5,8 +5,7 @@ const restricted = require('../auth/authenticate-middleware.js');
 const generateToken = require('../auth/generateToken.js');
 const Event = require('./event-helpers');
 
-// Make an Endpoint for the google api that feeds the {ID, EventName, EventLocation(with string address and the lang and longatute)}
-
+// root test endpoint
 router.get('/', (req, res) => {
     Event.find()
         .then(event => {
@@ -17,7 +16,16 @@ router.get('/', (req, res) => {
         })
 })
 
-
+// Make an Endpoint for the google api that feeds the {ID, EventName, EventLocation(with string address and the lang and longatute)}
+router.get('/location', (req, res) => {
+    Event.findLocation()
+        .then(location => {
+            res.json(location)
+        })
+        .catch(error => {
+            res.status(404).json(error)
+        })
+})
 // An Endpoint for all Event Data
 
 // An Endpoint that gives shows Admin Active Events
