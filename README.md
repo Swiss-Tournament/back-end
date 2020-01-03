@@ -94,7 +94,11 @@ Invalid-Email-Password
 | email | String | <p>The New Users email *Required, *Unique</p>|
 | username | String | <p>The New Users username *Required, *Unique</p>|
 | password | String | <p>The New Users password *Required</p>|
+| firstName | String | <p>The New Users firstName *Required</p>|
+| lastName | String | <p>The New Users lastName *Required</p>|
 | location | String | <p>The New Users location *Optional</p>|
+| lat | float | <p>The New Users Latitude *Optional precision of 6</p>|
+| lng | float | <p>The New Users Longitude *Optional precision of 6</p>|
 
 ### Success Response
 
@@ -246,10 +250,14 @@ Success-Response:
 
 | Name     | Type       | Description                           |
 |:---------|:-----------|:--------------------------------------|
-| email | String | <p>The New Users email *Optional</p>|
-| username | String | <p>The New Users username *Optional</p>|
+| email | String | <p>The New Users email *Optional *Unique</p>|
+| username | String | <p>The New Users username *Optional *Unique</p>|
 | password | String | <p>The New Users password *Optional</p>|
+| firstName | String | <p>The New Users firstName *Optional</p>|
+| lastName | String | <p>The New Users lastName *Optional</p>|
 | location | String | <p>The New Users location *Optional</p>|
+| lat | float | <p>The New Users Latitude *Optional precision of 6</p>|
+| lng | float | <p>The New Users Longitude *Optional precision of 6</p>|
 
 ### Success Response
 
