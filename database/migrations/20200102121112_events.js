@@ -117,11 +117,11 @@ exports.up = function (knex) {
         .onDelete('CASCADE');
       tbl.primary(['match_id', 'player1_id', 'player2_id']);
     })
-    .createTable('games', tbl => {
+    .createTable('game', tbl => {
       tbl.increments();
       tbl.integer('player1_score');
       tbl.integer('player2_score');
-      tbl.string('gameResults');
+      tbl.string('matchResults');
       tbl
         .integer('match_id')
         .unsigned()
@@ -137,7 +137,7 @@ exports.down = function (knex) {
   return knex.schema
     .dropTableIfExists('game')
     .dropTableIfExists('pairings')
-    .dropTableIfExists('match')
+    .dropTableIfExists('master')
     .dropTableIfExists('playerList')
     .dropTableIfExists('admins')
     .dropTableIfExists('events');
