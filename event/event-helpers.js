@@ -15,7 +15,9 @@ function findLocation() {
 }
 
 function findByEventId(id) {
-  return db('events').where({ id }).first();
+  return db('events')
+    .where({ id })
+    .first();
 }
 
 function findPlayers(id) {
@@ -26,13 +28,13 @@ function findPlayers(id) {
 function joinAdmin(id) {
   return db('events')
     .innerJoin('admins', 'events.id', 'admins.event_id')
-    .where({ 'admins.user_id': id })
+    .where({ 'admins.user_id': id });
 }
 
 function joinPlayer(id) {
   return db('events')
     .innerJoin('playerList', 'events.id', 'playerList.event_id')
-    .where({ 'playerList.user_id': id })
+    .where({ 'playerList.user_id': id });
 }
 
 /** ==================================================================== */
@@ -42,12 +44,11 @@ function joinPlayer(id) {
 function addEvent(event) {
   return db('events')
     .insert(event, 'id')
-    .returning('id')
+    .returning('id');
 }
 
 function addAdmin({ event_id, user_id }) {
-  return db('admins')
-    .insert({ event_id: event_id, user_id: user_id })
+  return db('admins').insert({ event_id, user_id });
 }
 
 function addPlayer(event) {
@@ -62,8 +63,8 @@ function addPlayer(event) {
 
 function update(id, load, what) {
   return db(what)
-    .where({ id: id })
-    .update(load)
+    .where({ id })
+    .update(load);
 }
 
 /** ==================================================================== */
@@ -72,8 +73,8 @@ function update(id, load, what) {
 
 function remove(id, what) {
   return db(what)
-    .where({ id: id })
-    .del()
+    .where({ id })
+    .del();
 }
 module.exports = {
   addEvent,
