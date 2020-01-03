@@ -37,6 +37,36 @@ router.get('/:id', (req, res) => {
         });
 });
 
+// An Endpoint that gives shows Admin Active Events
+router.get('/admin/:id', (req, res) => {
+    const { id } = req.params;
+    // This should grab all event_ids from an
+    // admin and display all of their events that they are Admin for
+    console.log(id);
+    Event.joinAdmin(id)
+        .then(event => {
+            res.status(200).json(event)
+        })
+        .catch(error => {
+            res.status(400).json(error)
+        })
+});
+
+// An Endpoint that gives shows Player Active Events
+router.get('/player/:id', (req, res) => {
+    const { id } = req.params;
+    // This should grab all event_ids from a
+    // player and display all of their events that they are a player for
+    Event.joinPlayer(id)
+        .then(event => {
+            res.status(200).json(event)
+        })
+        .catch(error => {
+            res.status(400).json(error)
+        })
+});
+
+
 // An Endpoint for adding a new Event, it requires the ID of the user creating it
 router.post('/:id', (req, res) => {
     const { id } = req.params;
@@ -62,46 +92,39 @@ router.post('/:id', (req, res) => {
         });
 });
 
-// An Endpoint that gives shows Admin Active Events
-router.get('/admin/:id', (req, res) => {
+// An Endpoint that updates a current Event, it requires the event ID
+router.put('/:id', (req, res) => {
     const { id } = req.params;
-    // This should grab all event_ids from an
-    // admin and display all of their events that they are Admin for
-    console.log(id);
-    Event.findByAdminId(id)
-        .then(event_id => {
-            let temp = event_id.map(e => {
-                Event.findByEventId(e.event_id)
-                    .then(events => {
-                        return events;
-                    })
-            })
-            res.status(201).json(temp)
-            console.log(event_id);
+    const what = 'events';
+
+    Event.update(id, req.body, what)
+        .then(updated => {
+            res.status(204).json({ message: 'Event Updated!' });
         })
         .catch(error => {
-            res.status(404).json({ message: 'user_id for admin not found' });
+            res
+                .status(400)
+                .json(error);
         });
 });
 
-// An Endpoint that gives shows Player Active Events
-router.get('/player/:id', (req, res) => {
-    const { id } = req.params;
-    // This should grab all event_ids from a
-    // player and display all of their events that they are a player for
-    Event.findByPlayerId(id)
-        .then(event_id => {
-            Event.findByEventId(event_id)
-                .then(events => {
-                    res.json(events);
-                })
-                .catch(error => {
-                    res.status(404).json({ message: 'event_id not found' });
-                });
+// An Endpoint that deletes an event
+router.delete('/:id', (req, res) => {
+    let { id } = req.params;
+    const what = 'events';
+
+    kick.remove(id, what)
+        .then(event => {
+            if (event) {
+                res.status(200).json({ message: `Event ID:${id} removed` })
+            } else {
+                res.status(404).json({ message: 'Kickstarter not found' })
+            }
         })
-        .catch(error => {
-            res.status(404).json({ message: 'user_id for admin not found' });
-        });
+        .catch(err => {
+            res.status(500).json({ error: 'The Kickstarter could not be removed.' })
+        })
 });
+
 
 module.exports = router;
