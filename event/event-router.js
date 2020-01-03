@@ -7,4 +7,6 @@ const Event = require('./event-helpers');
 
 // Make an Endpoint for the google api that feeds the {ID, EventName, EventLocation(with string address and the lang and longatute)}
 
+// 
+
 module.exports = router;

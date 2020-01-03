@@ -108,16 +108,16 @@ exports.up = function (knex) {
                 .integer('player1_id')
                 .unsigned()
                 .notNullable()
-                .references('user_id')
-                .inTable('playerList')
+                .references('id')
+                .inTable('users')
                 .onUpdate('CASCADE')
                 .onDelete('CASCADE');
             tbl
                 .integer('player2_id')
                 .unsigned()
                 .notNullable()
-                .references('user_id')
-                .inTable('playerList')
+                .references('id')
+                .inTable('users')
                 .onUpdate('CASCADE')
                 .onDelete('CASCADE');
             tbl.primary(['game_id', 'player1_id', 'player2_id'])
