@@ -37,13 +37,12 @@ function joinPlayer(id) {
 function addEvent(event) {
   return db('events')
     .insert(event, 'id')
-    .returning('*');
+    .returning('id')
 }
 
-function addAdmin(admin) {
+function addAdmin({ event_id, user_id }) {
   return db('admins')
-    .insert(admin, 'id')
-    .returning('*');
+    .insert({ event_id: event_id, user_id: user_id })
 }
 
 function addPlayer(event) {
