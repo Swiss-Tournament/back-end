@@ -31,7 +31,12 @@ router.get('/:id', (req, res) => {
 
     Event.findByEventId(id)
         .then(event => {
-            res.status(201).json(event);
+            event.location = {
+                location: event.location,
+                lat: event.lat,
+                lng: event.lng
+            }
+            res.status(200).json(event);
         })
         .catch(error => {
             res.status(404).json({ message: 'It is done broken man :id' });
