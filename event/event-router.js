@@ -33,8 +33,8 @@ router.get('/:id', (req, res) => {
         .then(event => {
             let temp = {};
 
-
             temp.id = event.id;
+            temp.name = event.name;
             temp.location = {
                 address: event.location,
                 lat: event.lat,
@@ -50,20 +50,30 @@ router.get('/:id', (req, res) => {
             temp.currentRound = event.currentRound;
             temp.maxRound = event.maxRound;
             temp.admins = [];
-            Event.findPlayers(id)
-                .then(even => {
-                    temp.players = even;
-                })
-                .catch(error => {
-                    res.status(404).json({ message: 'It is broken inside of findPlayer' });
-                })
-
             temp.scoreBoard = [];
+            temp.players;
 
 
+            Event.findPlayers(id)
+                .then(players => {
+                    temp.players = players.map(e => {
+                        return e.firstName + ' ' + e.lastName;
+                    });
+                    temp.scoreBoard = players.map(e => {
+                        return {
+                            name: e.firstName + ' ' + e.lastName,
+                            points: e.points,
 
-            console.log('temp', temp)
-            res.status(200).json(temp);
+                        }
+                    });
+                    Event.findAdmin(id)
+                        .then(admins => {
+                            temp.admins = admins.map(e => {
+                                return e.user_id;
+                            });
+                            res.status(200).json(temp);
+                        })
+                })
         })
         .catch(error => {
             res.status(404).json({ message: 'It is done broken man :id' });
@@ -75,7 +85,6 @@ router.get('/admin/:id', (req, res) => {
     const { id } = req.params;
     // This should grab all event_ids from an
     // admin and display all of their events that they are Admin for
-    console.log(id);
     Event.joinAdmin(id)
         .then(event => {
             res.status(200).json(event)
