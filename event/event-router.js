@@ -31,12 +31,29 @@ router.get('/:id', (req, res) => {
 
     Event.findByEventId(id)
         .then(event => {
-            event.location = {
-                location: event.location,
+            let temp = {};
+
+            temp.id = event.id;
+            temp.location = {
+                address: event.address,
                 lat: event.lat,
                 lng: event.lng
-            }
-            res.status(200).json(event);
+            };
+            temp.public = event.public;
+            temp.complete = event.complete;
+            temp.date = event.date;
+            temp.gameFormat = event.gameFormat;
+            temp.eventNotes = event.eventNotes;
+            temp.maxPlayers = event.maxPLayers;
+            temp.roundEndTime = event.roundEndTime;
+            temp.currentRound = event.currentRound;
+            temp.maxRound = event.maxRound;
+            temp.admins = [];
+            temp.players = [{}];
+            temp.scoreBoard = [];
+
+            console.log('temp', temp)
+            res.status(200).json(temp);
         })
         .catch(error => {
             res.status(404).json({ message: 'It is done broken man :id' });
