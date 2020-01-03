@@ -11,7 +11,24 @@ function find() {
 }
 
 function findLocation() {
-  return db('events').select(['id', 'name', 'location', 'lat', 'lng'])
+  return db('events').select(['id', 'date', 'name', 'location', 'lat', 'lng']);
+}
+
+function findByAdminId(id) {
+  return db('admins')
+    .where({ 'user_id': id })
+    .select('event_id')
+}
+
+function findByPlayerId(id) {
+  return db('player')
+    .where({ 'user_id': id })
+    .select('event_id')
+}
+
+function findByEventId(id) {
+  return db('events')
+    .where({ id })
 }
 
 // function findBy(filter) {
@@ -49,7 +66,9 @@ module.exports = {
   // update,
   find,
   findLocation,
+  findByAdminId,
+  findByPlayerId,
   // findBy,
-  // findById,
+  findByEventId,
   // remove,
 };
