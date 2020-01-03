@@ -25,7 +25,18 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get;
+router.get('/:id', (req, res) => {
+    let { id } = req.params;
+
+    Event.findByEventId(id)
+        .then(event => {
+            res.status(201).json(event)
+        })
+        .catch(error => {
+            res.status(404).json({ message: 'It is done broken man :id' })
+        })
+})
+
 
 // An Endpoint for adding a new Event, it requires the ID of the user creating it
 router.post('/:id', (req, res) => {
