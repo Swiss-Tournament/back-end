@@ -19,6 +19,6 @@ server.get('/', (req, res) => {
 });
 
 server.use('/api/auth', authRouter);
-server.use('/api/event', event, authenticate); // Removed authenticate for testing.
+server.use('/api/event', event); // Removed authenticate for testing.
 
 module.exports = server;
