@@ -3,7 +3,17 @@ exports.up = function (knex) {
         .createTable('events', tbl => {
             tbl.increments();
             tbl
+                .string('name')
+                .notNullable()
+                .unique();
+            tbl
                 .string('location', 255) // what form is the data for location
+                .notNullable();
+            tbl
+                .float('lat', 6)
+                .notNullable();
+            tbl
+                .float('lng', 6)
                 .notNullable();
             // admins is a seperate table tied in by event ID
             tbl.boolean('public').notNullable();
@@ -37,7 +47,6 @@ exports.up = function (knex) {
             tbl.primary(['event_id', 'user_id'])
         })
         .createTable('playerList', tbl => {
-            tbl.increments();
             tbl
                 .integer('user_id')
                 .unsigned()
@@ -99,7 +108,7 @@ exports.up = function (knex) {
                 .integer('player1_id')
                 .unsigned()
                 .notNullable()
-                .references('id')
+                .references('user_id')
                 .inTable('playerList')
                 .onUpdate('CASCADE')
                 .onDelete('CASCADE');
@@ -107,7 +116,7 @@ exports.up = function (knex) {
                 .integer('player2_id')
                 .unsigned()
                 .notNullable()
-                .references('id')
+                .references('user_id')
                 .inTable('playerList')
                 .onUpdate('CASCADE')
                 .onDelete('CASCADE');
