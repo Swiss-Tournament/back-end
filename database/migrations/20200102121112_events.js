@@ -9,7 +9,6 @@ exports.up = function (knex) {
             tbl.boolean('public').notNullable();
             tbl.boolean('complete').notNullable();
             tbl.integer('date');
-            tbl.integer('time');
             //player list will be a table that connects using the event ID
             tbl.string('gameFormat', 255).notNullable();
             tbl.string('eventNotes', 2500)
@@ -127,6 +126,6 @@ exports.down = function (knex) {
         .dropTableIfExists('pairings')
         .dropTableIfExists('game')
         .dropTableIfExists('playerList')
-        .dropTableIfExists('admin')
+        .dropTableIfExists('admins')
         .dropTableIfExists('events')
 };
