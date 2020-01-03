@@ -26,17 +26,16 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-    let { id } = req.params;
+  const { id } = req.params;
 
-    Event.findByEventId(id)
-        .then(event => {
-            res.status(201).json(event)
-        })
-        .catch(error => {
-            res.status(404).json({ message: 'It is done broken man :id' })
-        })
-})
-
+  Event.findByEventId(id)
+    .then(event => {
+      res.status(201).json(event);
+    })
+    .catch(error => {
+      res.status(404).json({ message: 'It is done broken man :id' });
+    });
+});
 
 // An Endpoint for adding a new Event, it requires the ID of the user creating it
 router.post('/:id', (req, res) => {
@@ -72,7 +71,7 @@ router.get('/admin/:id', (req, res) => {
   Event.findByAdminId(id)
 
     .then(event_id => {
-        console.log(event_id);
+      console.log(event_id);
       Event.findByEventId(event_id.event_id)
         .then(events => {
           res.json(events);

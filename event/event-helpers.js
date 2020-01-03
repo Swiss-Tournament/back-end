@@ -17,7 +17,7 @@ function findLocation() {
 function findByAdminId(id) {
   return db('admins')
     .where({ user_id: id })
-    .select('event_id')
+    .select('event_id');
 }
 
 function findByPlayerId(id) {
