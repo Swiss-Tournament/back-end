@@ -71,6 +71,7 @@ router.get('/admin/:id', (req, res) => {
     Event.findByAdminId(id)
         .then(event_id => {
             let temp = event_id.map(e => {
+                console.log('e', e)
                 Event.findByEventId(e.event_id)
                     .then(events => {
                         return events;
