@@ -1,7 +1,7 @@
 const db = require('../database/db-config.js');
 
 /** ==================================================================== */
-/** =================### EVENT HELPERS ###============================= */
+/** =================### EVENT FIND HELPERS ###============================= */
 /** ================================================================== */
 
 // be able to pull all active events and output: Event ID & Location
@@ -30,6 +30,29 @@ function findByEventId(id) {
   return db('events')
     .where({ id })
 }
+
+/** ==================================================================== */
+/** =================### EVENT ADD HELPERS ###============================= */
+/** ================================================================== */
+
+function addEvent(event) {
+  return db('events')
+    .insert(event, 'id')
+    .returning('*');
+}
+
+function addAdmin(admin) {
+  return db('admins')
+    .insert(admin, 'id')
+    .returning('*');
+}
+
+function addPlayer(event) {
+  return db('events')
+    .insert(event, 'id')
+    .returning('*');
+}
+
 
 // function findBy(filter) {
 //     return db('users').where(filter);
@@ -62,7 +85,9 @@ function findByEventId(id) {
 // }
 
 module.exports = {
-  // add,
+  addEvent,
+  addAdmin,
+  addPlayer,
   // update,
   find,
   findLocation,

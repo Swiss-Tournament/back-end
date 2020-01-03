@@ -1,8 +1,6 @@
 const router = require('express').Router();
-const bcrypt = require('bcryptjs');
 
 const restricted = require('../auth/authenticate-middleware.js');
-const generateToken = require('../auth/generateToken.js');
 const Event = require('./event-helpers');
 
 // Endpoint for the google api that returns the ['id', 'name', 'location', 'lat', 'lng']
@@ -27,6 +25,29 @@ router.get('/', (req, res) => {
         })
 })
 
+// An Endpoint for adding a new Event, it requires the ID of the user creating it
+router.post('/:id', (req, res) => {
+    let { id } = req.params;
+
+    Event.add(req.body)
+        .then(saved => {
+            res.status(201).json({ message: 'New Event created!' })
+            let admin;
+            admin.event_id = saved.id;
+            admin.user_id = { id };
+            Event.addAdmin(admin)
+                .then(saved => {
+                    res.status(201).json(saved)
+                })
+                .catch(error => {
+                    res.status(400).json({ message: 'It broke' })
+                })
+        })
+        .catch(error => {
+            res.status(400).json({ message: 'Invalid Registration, please try again.' });
+        })
+})
+
 // An Endpoint that gives shows Admin Active Events
 router.get('/admin/:id', (req, res) => {
     let { id } = req.params;
@@ -39,7 +60,8 @@ router.get('/admin/:id', (req, res) => {
                     res.json(events)
                 })
                 .catch(error => {
-                    res.status(404).json({ message: 'event_id not found' })
+                    console.log('This is an error inside of findbyeventid', error)
+                    res.status(404).json({ message: 'event_id not found', error })
                 })
         })
         .catch(error => {
