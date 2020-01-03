@@ -7,7 +7,6 @@ const db = require('../database/db-config.js');
 // be able to pull all active events and output: Event ID & Location
 
 
-
 function find() {
     return db('users').select('id', 'username', 'password');
 }

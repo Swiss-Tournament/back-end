@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "db:rollback": "knex migrate:rollback",
+    "db:latest" : "knex migrate:latest",
     "lint:fix": "eslint . --fix",
     "server": "nodemon index.js",
     "start": "node index.js",

@@ -4,18 +4,18 @@ exports.up = function (knex) {
             tbl.increments();
             tbl
                 .string('location', 255) // what form is the data for location
-                .notNullable()
+                .notNullable();
             // admins is a seperate table tied in by event ID
             tbl.boolean('public').notNullable();
-            tbl.boolean('complete').notNullable();
-            tbl.integer('date');
-            //player list will be a table that connects using the event ID
+            tbl.boolean('complete').defaultTo(false);
+            tbl.dateTime('date').notNullable();
+            // player list will be a table that connects using the event ID
             tbl.string('gameFormat', 255).notNullable();
-            tbl.string('eventNotes', 2500)
-            tbl.integer('maxPlayers')
-            tbl.integer('roundEndTime')
-            tbl.integer('currentRound')
-            tbl.integer('maxRounds')
+            tbl.string('eventNotes', 2500);
+            tbl.integer('maxPlayers');
+            tbl.integer('roundEndTime');
+            tbl.integer('currentRound');
+            tbl.integer('maxRounds');
         })
         .createTable('admins', tbl => {
             tbl.increments();
@@ -27,7 +27,7 @@ exports.up = function (knex) {
                 .references('id')
                 .inTable('events')
                 .onUpdate('CASCADE')
-                .onDelete('CASCADE')
+                .onDelete('CASCADE');
         })
         .createTable('playerList', tbl => {
             tbl.increments();
@@ -48,7 +48,7 @@ exports.up = function (knex) {
 
             tbl.integer('matchesPlayed');
             tbl.integer('matchesWon');
-            tbl.integer('matchesTied')
+            tbl.integer('matchesTied');
 
             // OMW - (Opponents Matches Won/Opponents Total Matches Played)
             // GW - (Games Won/Games Played)
@@ -64,10 +64,10 @@ exports.up = function (knex) {
                 .inTable('events')
                 .onUpdate('CASCADE')
                 .onDelete('CASCADE');
-            tbl.integer('matchesPlayed')
-            tbl.integer('player1_score')
-            tbl.integer('player2_score')
-            tbl.string('gameResults')
+            tbl.integer('matchesPlayed');
+            tbl.integer('player1_score');
+            tbl.integer('player2_score');
+            tbl.string('gameResults');
         })
         .createTable('pairings', tbl => {
             tbl.increments();
@@ -106,9 +106,9 @@ exports.up = function (knex) {
         })
         .createTable('match', tbl => {
             tbl.increments();
-            tbl.integer('player1_score')
-            tbl.integer('player2_score')
-            tbl.string('gameResults')
+            tbl.integer('player1_score');
+            tbl.integer('player2_score');
+            tbl.string('gameResults');
             tbl
                 .integer('game_id')
                 .unsigned()
@@ -117,7 +117,7 @@ exports.up = function (knex) {
                 .inTable('game')
                 .onUpdate('CASCADE')
                 .onDelete('CASCADE');
-        })
+        });
 };
 
 exports.down = function (knex) {
@@ -127,5 +127,5 @@ exports.down = function (knex) {
         .dropTableIfExists('game')
         .dropTableIfExists('playerList')
         .dropTableIfExists('admins')
-        .dropTableIfExists('events')
+        .dropTableIfExists('events');
 };
