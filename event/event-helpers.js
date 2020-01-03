@@ -7,7 +7,7 @@ const db = require('../database/db-config.js');
 // be able to pull all active events and output: Event ID & Location
 
 function find() {
-    return db('events');
+  return db('events');
 }
 
 // function findBy(filter) {
@@ -41,10 +41,10 @@ function find() {
 // }
 
 module.exports = {
-    // add,
-    // update,
-    find,
-    // findBy,
-    // findById,
-    // remove,
+  // add,
+  // update,
+  find,
+  // findBy,
+  // findById,
+  // remove,
 };
