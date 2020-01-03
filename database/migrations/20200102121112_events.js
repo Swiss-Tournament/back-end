@@ -1,4 +1,4 @@
-exports.up = function(knex) {
+exports.up = function (knex) {
   return knex.schema
     .createTable('events', tbl => {
       tbl.increments();
@@ -75,7 +75,7 @@ exports.up = function(knex) {
       // GW - (Games Won/Games Played)
       // OGW - (Opponents Games Won/Opponents Total Games Played)
     })
-    .createTable('game', tbl => {
+    .createTable('match', tbl => {
       tbl.increments();
       tbl
         .integer('event_id')
@@ -85,7 +85,7 @@ exports.up = function(knex) {
         .inTable('events')
         .onUpdate('CASCADE')
         .onDelete('CASCADE');
-      tbl.integer('matchesPlayed');
+      tbl.integer('gamesPlayed');
       tbl.integer('player1_score');
       tbl.integer('player2_score');
       tbl.string('gameResults');
@@ -117,7 +117,7 @@ exports.up = function(knex) {
         .onDelete('CASCADE');
       tbl.primary(['game_id', 'player1_id', 'player2_id']);
     })
-    .createTable('match', tbl => {
+    .createTable('games', tbl => {
       tbl.increments();
       tbl.integer('player1_score');
       tbl.integer('player2_score');
@@ -133,7 +133,7 @@ exports.up = function(knex) {
     });
 };
 
-exports.down = function(knex) {
+exports.down = function (knex) {
   return knex.schema
     .dropTableIfExists('match')
     .dropTableIfExists('pairings')

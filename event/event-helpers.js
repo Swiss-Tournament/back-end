@@ -15,7 +15,7 @@ function findLocation() {
 }
 
 function findByEventId(id) {
-  return db('events').where({ id });
+  return db('events').where({ id }).first();
 }
 
 function joinAdmin(id) {
