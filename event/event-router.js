@@ -227,29 +227,29 @@ router.get('/:id', (req, res) => {
 
   Event.findByEventId(id)
     .then(event => {
-            let temp = {};
+      const temp = {};
 
-            temp.id = event.id;
-            temp.location = {
-                address: event.address,
-                lat: event.lat,
-                lng: event.lng
-            };
-            temp.public = event.public;
-            temp.complete = event.complete;
-            temp.date = event.date;
-            temp.gameFormat = event.gameFormat;
-            temp.eventNotes = event.eventNotes;
-            temp.maxPlayers = event.maxPLayers;
-            temp.roundEndTime = event.roundEndTime;
-            temp.currentRound = event.currentRound;
-            temp.maxRound = event.maxRound;
-            temp.admins = [];
-            temp.players = [{}];
-            temp.scoreBoard = [];
+      temp.id = event.id;
+      temp.location = {
+        address: event.address,
+        lat: event.lat,
+        lng: event.lng,
+      };
+      temp.public = event.public;
+      temp.complete = event.complete;
+      temp.date = event.date;
+      temp.gameFormat = event.gameFormat;
+      temp.eventNotes = event.eventNotes;
+      temp.maxPlayers = event.maxPLayers;
+      temp.roundEndTime = event.roundEndTime;
+      temp.currentRound = event.currentRound;
+      temp.maxRound = event.maxRound;
+      temp.admins = [];
+      temp.players = [{}];
+      temp.scoreBoard = [];
 
-            console.log('temp', temp)
-            res.status(200).json(temp);
+      console.log('temp', temp);
+      res.status(200).json(temp);
     })
     .catch(error => {
       res.status(404).json({ message: 'It is done broken man :id' });
@@ -343,7 +343,5 @@ router.delete('/:id', (req, res) => {
       res.status(500).json({ error: 'The Kickstarter could not be removed.' });
     });
 });
-
-
 
 module.exports = router;
