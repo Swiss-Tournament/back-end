@@ -5,7 +5,6 @@ const restricted = require('../auth/authenticate-middleware.js');
 const generateToken = require('../auth/generateToken.js');
 const Event = require('./event-helpers');
 
-// What 
-
+// What
 
 module.exports = router;

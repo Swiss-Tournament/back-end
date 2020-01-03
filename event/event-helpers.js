@@ -18,7 +18,7 @@ const db = require('../database/db-config.js');
 //     time: 'time of event set by user-required',
 //     playerList: {
 //         player1,
-//         player2 // This is a list that isn't required at creation and 
+//         player2 // This is a list that isn't required at creation and
 //                 // the admin should be able to add, view, and edit at any time
 //     },
 //     gameFormat: 'drop down is required',
