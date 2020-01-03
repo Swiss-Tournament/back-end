@@ -10,6 +10,10 @@ function find() {
   return db('events');
 }
 
+function findLocation() {
+  return db('events').select(['id', 'name', 'location', 'lat', 'lng'])
+}
+
 // function findBy(filter) {
 //     return db('users').where(filter);
 // }
@@ -44,6 +48,7 @@ module.exports = {
   // add,
   // update,
   find,
+  findLocation,
   // findBy,
   // findById,
   // remove,
