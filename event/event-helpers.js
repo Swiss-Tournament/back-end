@@ -28,7 +28,7 @@ function findByPlayerId(id) {
 
 function findByEventId(id) {
   return db('events')
-    .where({ id })
+    .where({ 'id': id })
 }
 
 /** ==================================================================== */
