@@ -25,6 +25,9 @@ router.get('/', (req, res) => {
         })
 })
 
+router.get
+
+
 // An Endpoint for adding a new Event, it requires the ID of the user creating it
 router.post('/:id', (req, res) => {
     let { id } = req.params;
