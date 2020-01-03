@@ -20,6 +20,11 @@ function findByEventId(id) {
     .first();
 }
 
+function findPlayers(id) {
+  return db('playerList')
+    .where({ event_id: id })
+}
+
 function joinAdmin(id) {
   return db('events')
     .innerJoin('admins', 'events.id', 'admins.event_id')
@@ -80,6 +85,7 @@ module.exports = {
   find,
   findLocation,
   joinPlayer,
+  findPlayers,
   // findBy,
   findByEventId,
   remove,

@@ -92,11 +92,11 @@ exports.up = function(knex) {
     })
     .createTable('pairings', tbl => {
       tbl
-        .integer('game_id')
+        .integer('match_id')
         .unsigned()
         .notNullable()
         .references('id')
-        .inTable('game')
+        .inTable('match')
         .onUpdate('CASCADE')
         .onDelete('CASCADE');
       tbl

@@ -229,9 +229,10 @@ router.get('/:id', (req, res) => {
     .then(event => {
       const temp = {};
 
+
       temp.id = event.id;
       temp.location = {
-        address: event.address,
+                address: event.location,
         lat: event.lat,
         lng: event.lng,
       };
@@ -245,10 +246,19 @@ router.get('/:id', (req, res) => {
       temp.currentRound = event.currentRound;
       temp.maxRound = event.maxRound;
       temp.admins = [];
-      temp.players = [{}];
+            Event.findPlayers(id)
+                .then(even => {
+                    temp.players = even;
+                })
+                .catch(error => {
+                    res.status(404).json({ message: 'It is broken inside of findPlayer' });
+                })
+
       temp.scoreBoard = [];
 
-      console.log('temp', temp);
+
+
+            console.log('temp', temp)
       res.status(200).json(temp);
     })
     .catch(error => {
