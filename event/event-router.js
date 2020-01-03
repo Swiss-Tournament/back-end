@@ -327,7 +327,7 @@ router.post('/:id', (req, res) => {
     .catch(error => {
       res
         .status(400)
-        .json({ message: 'Invalid Registration, please try again.' });
+        .json(error);
     });
 });
 
