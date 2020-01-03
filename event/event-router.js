@@ -25,6 +25,7 @@ router.get('/', (req, res) => {
         });
 });
 
+// An Endpoint for Event Data
 router.get('/:id', (req, res) => {
     const { id } = req.params;
 
@@ -93,20 +94,6 @@ router.post('/:id', (req, res) => {
                 .json({ message: 'Invalid Registration, please try again.' });
         });
 });
-
-// console.log('This is response', saved)
-// let admin;
-// admin.event_id = saved;
-// admin.user_id = id;
-// console.log('This is admin', admin)
-
-// Event.addAdmin(admin)
-//     .then(added => {
-//         console.log("hello!")
-//     })
-//     .catch(error => {
-//         res.status(404).json({ message: 'Oh no it broke!' })
-//     })
 
 
 // An Endpoint that updates a current Event, it requires the event ID
