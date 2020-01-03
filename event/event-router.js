@@ -7,6 +7,23 @@ const Event = require('./event-helpers');
 
 // Make an Endpoint for the google api that feeds the {ID, EventName, EventLocation(with string address and the lang and longatute)}
 
-// 
+router.get('/', (req, res) => {
+    Event.find()
+        .then(event => {
+            res.json(event);
+        })
+        .catch(error => {
+            res.status(404).json(error);
+        })
+})
+
+
+// An Endpoint for all Event Data
+
+// An Endpoint that gives shows Admin Active Events
+
+// An Endpoint that gives shows Player Active Events
+
+
 
 module.exports = router;
