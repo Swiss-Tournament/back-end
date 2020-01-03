@@ -11,6 +11,12 @@ for (let i = 0; i < 100; i++) {
   });
 }
 
+data.push({
+  email: 'user@user.com',
+  username: 'testuser',
+  password: bcrypt.hashSync('password'),
+});
+
 exports.seed = knex =>
   knex('users')
     .del()
