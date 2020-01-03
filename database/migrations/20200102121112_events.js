@@ -18,8 +18,6 @@ exports.up = function (knex) {
             tbl.integer('maxRounds');
         })
         .createTable('admins', tbl => {
-            tbl.increments();
-            tbl.string('username').notNullable();
             tbl
                 .integer('event_id')
                 .unsigned()
@@ -28,10 +26,26 @@ exports.up = function (knex) {
                 .inTable('events')
                 .onUpdate('CASCADE')
                 .onDelete('CASCADE');
+            tbl
+                .integer('user_id')
+                .unsigned()
+                .notNullable()
+                .references('id')
+                .inTable('users')
+                .onUpdate('CASCADE')
+                .onDelete('CASCADE');
+            tbl.primary(['event_id', 'user_id'])
         })
         .createTable('playerList', tbl => {
             tbl.increments();
-            tbl.string('username').notNullable();
+            tbl
+                .integer('user_id')
+                .unsigned()
+                .notNullable()
+                .references('id')
+                .inTable('users')
+                .onUpdate('CASCADE')
+                .onDelete('CASCADE');
             tbl
                 .integer('event_id')
                 .unsigned()
@@ -49,6 +63,9 @@ exports.up = function (knex) {
             tbl.integer('matchesPlayed');
             tbl.integer('matchesWon');
             tbl.integer('matchesTied');
+
+            tbl.primary(['event_id', 'user_id'])
+
 
             // OMW - (Opponents Matches Won/Opponents Total Matches Played)
             // GW - (Games Won/Games Played)
@@ -70,15 +87,6 @@ exports.up = function (knex) {
             tbl.string('gameResults');
         })
         .createTable('pairings', tbl => {
-            tbl.increments();
-            tbl
-                .integer('event_id')
-                .unsigned()
-                .notNullable()
-                .references('id')
-                .inTable('events')
-                .onUpdate('CASCADE')
-                .onDelete('CASCADE');
             tbl
                 .integer('game_id')
                 .unsigned()
@@ -103,6 +111,8 @@ exports.up = function (knex) {
                 .inTable('playerList')
                 .onUpdate('CASCADE')
                 .onDelete('CASCADE');
+            tbl.primary(['game_id', 'player1_id', 'player2_id'])
+
         })
         .createTable('match', tbl => {
             tbl.increments();
