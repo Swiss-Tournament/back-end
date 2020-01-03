@@ -5,6 +5,6 @@ const restricted = require('../auth/authenticate-middleware.js');
 const generateToken = require('../auth/generateToken.js');
 const Event = require('./event-helpers');
 
-// What
+// Make an Endpoint for the google api that feeds the {ID, EventName, EventLocation(with string address and the lang and longatute)}
 
 module.exports = router;
