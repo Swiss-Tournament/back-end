@@ -69,18 +69,14 @@ router.get('/admin/:id', (req, res) => {
     // admin and display all of their events that they are Admin for
     console.log(id);
     Event.findByAdminId(id)
-
         .then(event_id => {
-            event_id.map(e => {
+            let temp = event_id.map(e => {
                 Event.findByEventId(e.event_id)
                     .then(events => {
-                        res.json(events);
+                        return events;
                     })
-                    .catch(error => {
-                        console.log('This is an error inside of findbyeventid', error);
-                        res.status(404).json({ message: 'event_id not found', error });
-                    });
             })
+            res.status(201).json(temp)
             console.log(event_id);
         })
         .catch(error => {
