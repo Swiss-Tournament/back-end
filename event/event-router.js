@@ -7,12 +7,12 @@ const Event = require('./event-helpers');
 router.get('/location', (req, res) => {
     Event.findLocation()
         .then(location => {
-            res.json(location)
+            res.json(location);
         })
         .catch(error => {
-            res.status(404).json(error)
-        })
-})
+            res.status(404).json(error);
+        });
+});
 
 // An Endpoint for all Event Data, without playerList or Admin List
 router.get('/', (req, res) => {
@@ -22,86 +22,88 @@ router.get('/', (req, res) => {
         })
         .catch(error => {
             res.status(404).json(error);
-        })
-})
+        });
+});
 
 router.get('/:id', (req, res) => {
-    let { id } = req.params;
+    const { id } = req.params;
 
     Event.findByEventId(id)
         .then(event => {
-            res.status(201).json(event)
+            res.status(201).json(event);
         })
         .catch(error => {
-            res.status(404).json({ message: 'It is done broken man :id' })
-        })
-})
-
+            res.status(404).json({ message: 'It is done broken man :id' });
+        });
+});
 
 // An Endpoint for adding a new Event, it requires the ID of the user creating it
 router.post('/:id', (req, res) => {
-    let { id } = req.params;
+    const { id } = req.params;
 
     Event.add(req.body)
         .then(saved => {
-            res.status(201).json({ message: 'New Event created!' })
+            res.status(201).json({ message: 'New Event created!' });
             let admin;
             admin.event_id = saved.id;
             admin.user_id = { id };
             Event.addAdmin(admin)
                 .then(saved => {
-                    res.status(201).json(saved)
+                    res.status(201).json(saved);
                 })
                 .catch(error => {
-                    res.status(400).json({ message: 'It broke' })
-                })
+                    res.status(400).json({ message: 'It broke' });
+                });
         })
         .catch(error => {
-            res.status(400).json({ message: 'Invalid Registration, please try again.' });
-        })
-})
+            res
+                .status(400)
+                .json({ message: 'Invalid Registration, please try again.' });
+        });
+});
 
 // An Endpoint that gives shows Admin Active Events
 router.get('/admin/:id', (req, res) => {
-    let { id } = req.params;
-    // This should grab all event_ids from an 
+    const { id } = req.params;
+    // This should grab all event_ids from an
     // admin and display all of their events that they are Admin for
+    console.log(id);
     Event.findByAdminId(id)
+
         .then(event_id => {
-            console.log('event_id', event_id)
-            Event.findByEventId(event_id)
+            console.log(event_id);
+            Event.findByEventId(event_id.event_id)
                 .then(events => {
-                    res.json(events)
+                    res.json(events);
                 })
                 .catch(error => {
-                    console.log('This is an error inside of findbyeventid', error)
-                    res.status(404).json({ message: 'event_id not found', error })
-                })
+                    console.log('This is an error inside of findbyeventid', error);
+                    res.status(404).json({ message: 'event_id not found', error });
+                });
         })
         .catch(error => {
             res.status(404).json({ message: 'user_id for admin not found' });
-        })
-})
+        });
+});
 
 // An Endpoint that gives shows Player Active Events
 router.get('/player/:id', (req, res) => {
-    let { id } = req.params;
-    // This should grab all event_ids from a 
+    const { id } = req.params;
+    // This should grab all event_ids from a
     // player and display all of their events that they are a player for
     Event.findByPlayerId(id)
         .then(event_id => {
             Event.findByEventId(event_id)
                 .then(events => {
-                    res.json(events)
+                    res.json(events);
                 })
                 .catch(error => {
-                    res.status(404).json({ message: 'event_id not found' })
-                })
+                    res.status(404).json({ message: 'event_id not found' });
+                });
         })
         .catch(error => {
             res.status(404).json({ message: 'user_id for admin not found' });
-        })
-})
-
+        });
+});
 
 module.exports = router;
