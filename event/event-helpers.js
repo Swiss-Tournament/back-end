@@ -6,47 +6,45 @@ const db = require('../database/db-config.js');
 
 // be able to pull all active events and output: Event ID & Location
 
-
 function find() {
-    return db('users').select('id', 'username', 'password');
+  return db('users').select('id', 'username', 'password');
 }
 
 function findBy(filter) {
-    return db('users').where(filter);
+  return db('users').where(filter);
 }
 
 function findById(id) {
-    return db('users')
-        .where({ id })
-        .select(['id', 'email', 'username', 'location'])
-        .first();
+  return db('users')
+    .where({ id })
+    .select(['id', 'email', 'username', 'location'])
+    .first();
 }
 
 function add(user) {
-    return db('users')
-        .insert(user, 'id')
-        .returning('*');
+  return db('users')
+    .insert(user, 'id')
+    .returning('*');
 }
 
 function update(id, load) {
-    return db('users')
-        .where({ id })
-        .update(load)
-        .returning(['id', 'email', 'username', 'location']);
+  return db('users')
+    .where({ id })
+    .update(load)
+    .returning(['id', 'email', 'username', 'location']);
 }
 
 function remove(id) {
-    return db('users')
-        .where({ id })
-        .del();
+  return db('users')
+    .where({ id })
+    .del();
 }
 
 module.exports = {
-    add,
-    update,
-    find,
-    findBy,
-    findById,
-    remove,
+  add,
+  update,
+  find,
+  findBy,
+  findById,
+  remove,
 };
-
