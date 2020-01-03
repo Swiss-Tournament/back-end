@@ -97,10 +97,14 @@ router.get('/user', restricted, (req, res) => {
  * @apiGroup User
  * @apiPermission token
  * @apiDescription Updates the current logged in user based on the provided token
- * @apiParam {String} email The New Users email *Optional
- * @apiParam {String} username The New Users username *Optional
+ * @apiParam {String} email The New Users email *Optional *Unique
+ * @apiParam {String} username The New Users username *Optional *Unique
  * @apiParam {String} password The New Users password *Optional
+ * @apiParam {String} firstName The New Users firstName *Optional
+ * @apiParam {String} lastName The New Users lastName *Optional
  * @apiParam {String} location The New Users location *Optional
+ * @apiParam {float} lat The New Users Latitude *Optional precision of 6
+ * @apiParam {float} lng The New Users Longitude *Optional precision of 6
  * @apiParamExample {json} Sample Request
  * {
  *     "password": "Not your momma password"
@@ -186,12 +190,18 @@ router.delete('/user', restricted, (req, res) => {
  * @apiParam {String} email The New Users email *Required, *Unique
  * @apiParam {String} username The New Users username *Required, *Unique
  * @apiParam {String} password The New Users password *Required
+ * @apiParam {String} firstName The New Users firstName *Required
+ * @apiParam {String} lastName The New Users lastName *Required
  * @apiParam {String} location The New Users location *Optional
+ * @apiParam {float} lat The New Users Latitude *Optional precision of 6
+ * @apiParam {float} lng The New Users Longitude *Optional precision of 6
  * @apiParamExample {json} Sample Request
  * {
  *     "email": "mtgtourney@mtg.com",
  *     "username": "mtgtourney",
  *     "password": "supersecretpassword"
+ *     "firstName": "Magic",
+ *     "lastName": "The Gathering"
  * }
  * @apiSuccess {Object} message Welcome message and token for the new user
  * @apiSuccessExample {json} Success-Response:
