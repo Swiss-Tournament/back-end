@@ -6,7 +6,6 @@ const db = require('../database/db-config.js');
 
 // be able to pull all active events and output: Event ID & Location
 
-
 function find() {
     return db('events');
 }
@@ -49,4 +48,3 @@ module.exports = {
     // findById,
     // remove,
 };
-

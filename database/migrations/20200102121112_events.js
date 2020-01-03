@@ -73,7 +73,7 @@ exports.up = function (knex) {
             tbl.integer('matchesWon');
             tbl.integer('matchesTied');
 
-            tbl.primary(['event_id', 'user_id'])
+            tbl.primary(['event_id', 'user_id']);
 
 
             // OMW - (Opponents Matches Won/Opponents Total Matches Played)
