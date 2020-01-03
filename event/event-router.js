@@ -5,7 +5,18 @@ const restricted = require('../auth/authenticate-middleware.js');
 const generateToken = require('../auth/generateToken.js');
 const Event = require('./event-helpers');
 
-// root test endpoint
+// Endpoint for the google api that returns the ['id', 'name', 'location', 'lat', 'lng']
+router.get('/location', (req, res) => {
+    Event.findLocation()
+        .then(location => {
+            res.json(location)
+        })
+        .catch(error => {
+            res.status(404).json(error)
+        })
+})
+
+// An Endpoint for all Event Data, without playerList or Admin List
 router.get('/', (req, res) => {
     Event.find()
         .then(event => {
@@ -16,22 +27,45 @@ router.get('/', (req, res) => {
         })
 })
 
-// Make an Endpoint for the google api that feeds the {ID, EventName, EventLocation(with string address and the lang and longatute)}
-router.get('/location', (req, res) => {
-    Event.findLocation()
-        .then(location => {
-            res.json(location)
+// An Endpoint that gives shows Admin Active Events
+router.get('/admin/:id', (req, res) => {
+    let { id } = req.params;
+    // This should grab all event_ids from an 
+    // admin and display all of their events that they are Admin for
+    Event.findByAdminId(id)
+        .then(event_id => {
+            Event.findByEventId(event_id)
+                .then(events => {
+                    res.json(events)
+                })
+                .catch(error => {
+                    res.status(404).json({ message: 'event_id not found' })
+                })
         })
         .catch(error => {
-            res.status(404).json(error)
+            res.status(404).json({ message: 'user_id for admin not found' });
         })
 })
-// An Endpoint for all Event Data
-
-// An Endpoint that gives shows Admin Active Events
 
 // An Endpoint that gives shows Player Active Events
-
+router.get('/player/:id', (req, res) => {
+    let { id } = req.params;
+    // This should grab all event_ids from a 
+    // player and display all of their events that they are a player for
+    Event.findByPlayerId(id)
+        .then(event_id => {
+            Event.findByEventId(event_id)
+                .then(events => {
+                    res.json(events)
+                })
+                .catch(error => {
+                    res.status(404).json({ message: 'event_id not found' })
+                })
+        })
+        .catch(error => {
+            res.status(404).json({ message: 'user_id for admin not found' });
+        })
+})
 
 
 module.exports = router;
