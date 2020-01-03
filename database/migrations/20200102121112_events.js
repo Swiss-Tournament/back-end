@@ -9,12 +9,8 @@ exports.up = function (knex) {
             tbl
                 .string('location', 255) // what form is the data for location
                 .notNullable();
-            tbl
-                .float('lat', 6)
-                .notNullable();
-            tbl
-                .float('lng', 6)
-                .notNullable();
+            tbl.float('lat', 6).notNullable();
+            tbl.float('lng', 6).notNullable();
             // admins is a seperate table tied in by event ID
             tbl.boolean('public').notNullable();
             tbl.boolean('complete').defaultTo(false);
@@ -44,7 +40,7 @@ exports.up = function (knex) {
                 .inTable('users')
                 .onUpdate('CASCADE')
                 .onDelete('CASCADE');
-            tbl.primary(['event_id', 'user_id'])
+            tbl.primary(['event_id', 'user_id']);
         })
         .createTable('playerList', tbl => {
             tbl
@@ -74,7 +70,6 @@ exports.up = function (knex) {
             tbl.integer('matchesTied');
 
             tbl.primary(['event_id', 'user_id']);
-
 
             // OMW - (Opponents Matches Won/Opponents Total Matches Played)
             // GW - (Games Won/Games Played)
@@ -120,8 +115,7 @@ exports.up = function (knex) {
                 .inTable('users')
                 .onUpdate('CASCADE')
                 .onDelete('CASCADE');
-            tbl.primary(['game_id', 'player1_id', 'player2_id'])
-
+            tbl.primary(['game_id', 'player1_id', 'player2_id']);
         })
         .createTable('match', tbl => {
             tbl.increments();
