@@ -130,7 +130,7 @@ router.delete('/:id', (req, res) => {
     let { id } = req.params;
     const what = 'events';
 
-    kick.remove(id, what)
+    Event.remove(id, what)
         .then(event => {
             if (event) {
                 res.status(200).json({ message: `Event ID:${id} removed` })
