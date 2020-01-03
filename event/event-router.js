@@ -71,19 +71,21 @@ router.get('/player/:id', (req, res) => {
 router.post('/:id', (req, res) => {
     const { id } = req.params;
 
-    Event.add(req.body)
+    Event.addEvent(req.body)
         .then(saved => {
-            res.status(201).json({ message: 'New Event created!' });
-            let admin;
-            admin.event_id = saved.id;
-            admin.user_id = { id };
+            let admin = {
+                event_id: saved[0],
+                user_id: id
+            };
             Event.addAdmin(admin)
-                .then(saved => {
-                    res.status(201).json(saved);
+                .then(added => {
+                    // Saved will have the event ID
+                    // User ID comes from the id
+                    res.status(201).json({ message: 'You made a connection' })
                 })
                 .catch(error => {
-                    res.status(400).json({ message: 'It broke' });
-                });
+                    res.status(404).json({ message: 'Oh no it broke!' })
+                })
         })
         .catch(error => {
             res
@@ -91,6 +93,21 @@ router.post('/:id', (req, res) => {
                 .json({ message: 'Invalid Registration, please try again.' });
         });
 });
+
+// console.log('This is response', saved)
+// let admin;
+// admin.event_id = saved;
+// admin.user_id = id;
+// console.log('This is admin', admin)
+
+// Event.addAdmin(admin)
+//     .then(added => {
+//         console.log("hello!")
+//     })
+//     .catch(error => {
+//         res.status(404).json({ message: 'Oh no it broke!' })
+//     })
+
 
 // An Endpoint that updates a current Event, it requires the event ID
 router.put('/:id', (req, res) => {
