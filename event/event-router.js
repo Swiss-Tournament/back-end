@@ -32,10 +32,10 @@ router.get('/:id', (req, res) => {
     Event.findByEventId(id)
         .then(event => {
             let temp = {};
-
+            console.log('event', event)
             temp.id = event.id;
             temp.location = {
-                address: event.address,
+                address: event.location,
                 lat: event.lat,
                 lng: event.lng
             };
