@@ -68,6 +68,7 @@ router.get('/admin/:id', (req, res) => {
     // admin and display all of their events that they are Admin for
     Event.findByAdminId(id)
         .then(event_id => {
+            console.log('event_id', event_id)
             Event.findByEventId(event_id)
                 .then(events => {
                     res.json(events)
