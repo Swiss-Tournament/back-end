@@ -1,4 +1,4 @@
-exports.up = function(knex) {
+exports.up = function (knex) {
   return knex.schema
     .createTable('events', tbl => {
       tbl.increments();
@@ -88,7 +88,7 @@ exports.up = function(knex) {
       tbl.integer('gamesPlayed');
       tbl.integer('player1_score');
       tbl.integer('player2_score');
-      tbl.string('gameResults');
+      tbl.string('matchResults');
     })
     .createTable('pairings', tbl => {
       tbl
@@ -133,7 +133,7 @@ exports.up = function(knex) {
     });
 };
 
-exports.down = function(knex) {
+exports.down = function (knex) {
   return knex.schema
     .dropTableIfExists('game')
     .dropTableIfExists('pairings')
